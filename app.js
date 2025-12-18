@@ -37,4 +37,5 @@ app.get("/", async (req, res) => {
 app.use("/user",userRouter);
 app.use("/blog",blogRouter);
 
-app.listen(PORT, (e) => console.log(`Server is live at: ${PORT}`));
+// Export the app for serverless handlers (Vercel) and local runners.
+module.exports = app;
