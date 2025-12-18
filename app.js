@@ -26,7 +26,7 @@ app.set("views", path.resolve("./views"));
 
 app.get("/", async (req, res) => {
     const allBlogs = await Blog.find({}).populate("createdBy");
-    console.log(req.user);
+    console.log("USER =>", req.user || "Guest User");
 
     return res.render("home",{
         user: req.user,

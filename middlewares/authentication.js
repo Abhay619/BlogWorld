@@ -1,21 +1,23 @@
 const { validateToken } = require("../services/authentication");
 
-function checkForAuthenticationCookie(cookieName){
-    return (req, res, next) => {
-        const tokenCookieValue = req.cookies[cookieName];
+function checkForAuthenticationCookie(cookieName) {
+  return (req, res, next) => {
+    req.user = null; // 👈 important line
 
-        if(!tokenCookieValue)
-            return next();
+    const tokenCookieValue = req.cookies?.[cookieName];
+    if (!tokenCookieValue) return next();
 
-        try {
-            const userPayload = validateToken(tokenCookieValue);
-            req.user = userPayload;
-        } catch (error) {}
-
-        return next();
+    try {
+      const userPayload = validateToken(tokenCookieValue);
+      req.user = userPayload;
+    } catch (err) {
+      // invalid / expired token — ignore silently
     }
-};
+
+    return next();
+  };
+}
 
 module.exports = {
-    checkForAuthenticationCookie,
-}
+  checkForAuthenticationCookie,
+};
